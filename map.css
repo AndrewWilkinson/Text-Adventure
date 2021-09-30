@@ -1,0 +1,26 @@
+.map-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: #80B0B0;
+    padding: 10px;
+  }
+  .room {
+    background-color: #ebd5b3;
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: center;
+  }
+  .unexplored {
+    background-color: #8d806c;
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: center;
+  }
+  .inaccesible  {
+    background-color: #604747;
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: center;
+  }
+
+  /* TODO add map change transition */

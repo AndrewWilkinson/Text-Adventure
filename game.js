@@ -1,5 +1,166 @@
 // Narrate
 
+class Item 
+{
+    _name = "";
+    _description = "";
+
+    constructor(name)
+    {
+        this._name = name;
+    }
+
+    get name()
+    {
+        return this._name;
+    }
+
+    get description()
+    {
+        return this._description;
+    }
+    set description(description)
+    {
+        if (description != "")
+        this._description = description;
+    }
+
+}
+
+class Weapon extends Item
+{
+    _damage = "";
+    _type = "";
+    _special = "";
+
+    constructor(name, type, damage)
+    {
+        super(name)
+        _type = type;
+        _damage = damage;
+    }
+
+    get name()
+    {
+        return this._name;
+    }
+
+    set description(description)
+    {
+        if (description != "")
+        this._description = description;
+    }
+
+}
+
+class Key extends Item
+{
+    _unlocks = "";
+
+    constructor(name, type, damage)
+    {
+        super(name)
+        _type = type;
+        _damage = damage;
+    }
+
+    get name()
+    {
+        return this._name;
+    }
+
+    set description(description)
+    {
+        if (description != "")
+        this._description = description;
+    }
+
+}
+
+class Feature
+{
+    _obstructs = "";
+
+    constructor(name, type, damage)
+    {
+        _type = type;
+        _damage = damage;
+    }
+}
+
+
+class Character 
+{
+    _name = "Unknown character";
+    _description = "";
+    _conversation = "";
+    _inventory = [];
+
+    get name()
+    {
+        return this._name;
+    }
+    set name(name)
+    {
+        if (name != "")
+        this._name = name;
+    }
+
+    get description()
+    {
+        return this._description;
+    }
+    set description(description)
+    {
+        if (description != "")
+        this._description = description;
+    }
+    talk()
+    {
+        return "get outtaaa here."
+    }
+    giveItem(item)
+    {
+        this._inventory.push(item);
+    }
+
+    constructor(health)
+    {
+        this._health = health;
+    }
+}
+
+class Enemy extends Character
+{
+    _damage = 0;
+
+    constructor(health,weakness, damage)
+    {
+        super(health)
+        this._weakness = weakness;
+        this._damage = damage;
+    }
+
+    defend(attackDamage, attackType)
+    {
+        if (attackType == this._weakness)
+        {
+            attackDamage *= 2;
+        }
+        this._health -= attackDamage;
+    }
+
+    // defend(attackDamage)
+    // {
+    //     this._health -= attackDamage;
+    // }
+
+    attack()
+    {
+        return this._damage;
+    }
+}
+
 class Room {
 
     constructor(name) {
@@ -70,7 +231,11 @@ function linkRoomsWestEast(west, east)
     east.linkRoom("West", west);
 }
 
-// 
+//
+function drawMap(thisRoom)
+{
+    //document.getElementById('map');
+}
 
 function attemptTravel(inputs) {
     const directions = ["North", "South", "East", "West"]
@@ -91,6 +256,8 @@ function attemptTravel(inputs) {
                 currentRoom = currentRoom.linkedRooms[desiredExit];
                 document.getElementById('story').innerHTML += "<br> You travel " + desiredExit;
                 document.getElementById('story').innerHTML += "<br> You are in: " + currentRoom.name; //+ " " + currentRoom.description;
+                
+                drawMap(currentRoom);
             }
             else {
                 document.getElementById('story').innerHTML += "<br> You cannot travel " + desiredExit;
