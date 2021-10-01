@@ -19,7 +19,7 @@ const rearGates = new Room("Rear Gates")
 const rockpiles = new Room("Rockpiles")
 const exerciseYard = new Room("Exercise Yard")
 
-const freedom = new Room("Freedom!")
+const freedom = new Room("Freedom! You win!")
 //connect map
 linkRoomsSouthNorth(armoury, entrance);
 linkRoomsSouthNorth(kitchen , pantry);

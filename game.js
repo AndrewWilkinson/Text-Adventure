@@ -1,150 +1,159 @@
 // Narrate
 
-class Item 
-{
+class Item {
     _name = "";
     _description = "";
 
-    constructor(name)
-    {
+    constructor(name) {
         this._name = name;
     }
 
-    get name()
-    {
+    get name() {
         return this._name;
     }
 
-    get description()
-    {
+    get description() {
         return this._description;
     }
-    set description(description)
-    {
+    set description(description) {
         if (description != "")
-        this._description = description;
+            this._description = description;
     }
 
 }
 
-class Weapon extends Item
-{
+class Weapon extends Item {
     _damage = "";
     _type = "";
     _special = "";
 
-    constructor(name, type, damage)
-    {
+    constructor(name, type, damage) {
         super(name)
         _type = type;
         _damage = damage;
     }
 
-    get name()
-    {
-        return this._name;
+    set description(description) {
+        if (description != "")
+            this._description = description;
     }
 
-    set description(description)
-    {
-        if (description != "")
-        this._description = description;
+    set special(special) {
+        this._special = special;
     }
 
 }
 
-class Key extends Item
-{
+class Key extends Item {
     _unlocks = "";
 
-    constructor(name, type, damage)
-    {
+    constructor(name, unlocks) {
         super(name)
-        _type = type;
-        _damage = damage;
+        this._unlocks = unlocks;
     }
 
-    get name()
-    {
+    set description(description) {
+        if (description != "")
+            this._description = description;
+    }
+
+    get unlocks() {
+        return this._unlocks;
+    }
+
+}
+
+class Door {
+    _obstructs = "";    //should be a direction from the perspective of the room this obstruction is found it
+    _name = ""
+
+    constructor(name, obstructs) {
+        this._name = name;
+        this._obstructs = obstructs;
+    }
+
+    get name() {
         return this._name;
     }
 
-    set description(description)
-    {
-        if (description != "")
-        this._description = description;
-    }
-
-}
-
-class Feature
-{
-    _obstructs = "";
-
-    constructor(name, type, damage)
-    {
-        _type = type;
-        _damage = damage;
+    unlock(key) {
+        if (key.unlocks = this._name) {
+            this._obstructs = "";
+            return "Unlocked " + this._name;
+        }
+        else
+            return "Nothing happened to " + this._name;
     }
 }
 
+class WeaponModificationStation {
+    _special = "";
 
-class Character 
-{
+    constructor(name, special) {
+        this._name = name;
+        this._special = special;
+    }
+
+    get name() {
+        return this._name;
+    }
+
+    modify(item) {
+
+        if (item instanceof Weapon) {
+            item.special = this._special;
+            return "Enhanced " + item.name + "with" + this._special;
+        }
+        else
+            return "Nothing happened to " + item.name;
+    }
+}
+
+
+class Character {
     _name = "Unknown character";
     _description = "";
     _conversation = "";
     _inventory = [];
 
-    get name()
-    {
+    get name() {
         return this._name;
     }
-    set name(name)
-    {
+    set name(name) {
         if (name != "")
-        this._name = name;
+            this._name = name;
     }
 
-    get description()
-    {
+    get description() {
         return this._description;
     }
-    set description(description)
-    {
+    set description(description) {
         if (description != "")
-        this._description = description;
+            this._description = description;
     }
-    talk()
-    {
+    talk() {
         return "get outtaaa here."
     }
-    giveItem(item)
-    {
+    giveItem(item) {
         this._inventory.push(item);
     }
 
-    constructor(health)
-    {
+    constructor(health) {
         this._health = health;
     }
 }
 
-class Enemy extends Character
-{
+class Enemy extends Character {
     _damage = 0;
 
-    constructor(health,weakness, damage)
-    {
+    constructor(health, weakness, damage) {
         super(health)
         this._weakness = weakness;
         this._damage = damage;
     }
 
-    defend(attackDamage, attackType)
-    {
-        if (attackType == this._weakness)
-        {
+    defend(attackDamage, attackType) {
+        if (attackType == this._weakness) {
             attackDamage *= 2;
         }
         this._health -= attackDamage;
@@ -155,8 +164,7 @@ class Enemy extends Character
     //     this._health -= attackDamage;
     // }
 
-    attack()
-    {
+    attack() {
         return this._damage;
     }
 }
@@ -171,8 +179,8 @@ class Room {
     }
 
     set description(description) {
-        if (typeof description === 'string' & description.length > 5) 
-        this._description = description;
+        if (typeof description === 'string' & description.length > 5)
+            this._description = description;
     }
 
     get description() {
@@ -183,8 +191,7 @@ class Room {
         this._linkedRooms[direction] = room;
     }
 
-    get linkedRooms()
-    {
+    get linkedRooms() {
         return this._linkedRooms;
     }
 
@@ -192,8 +199,13 @@ class Room {
         return this._name;
     }
 
-    explored(){
-        this._explored = true;
+    set explored(explored) 
+    {
+        this._explored = explored;
+    }
+
+    get explored() {
+        return this._explored;
     }
 
     // get north()
@@ -219,22 +231,47 @@ class Room {
 }
 
 //safer way to create a two way passage between rooms
-function linkRoomsSouthNorth(south, north)
-{
+function linkRoomsSouthNorth(south, north) {
     south.linkRoom("North", north);
     north.linkRoom("South", south);
 }
 //safer way to create a two way passage between rooms
-function linkRoomsWestEast(west, east)
-{
+function linkRoomsWestEast(west, east) {
     west.linkRoom("East", east);
     east.linkRoom("West", west);
 }
 
+
+
 //
-function drawMap(thisRoom)
-{
-    //document.getElementById('map');
+function drawMap() {
+    // document.getElementById('map-container').hidden = false;
+
+    ['North', 'East', 'South', 'West'].forEach(direction => {
+
+        if (direction in currentRoom.linkedRooms)   //check for a path
+        {
+            //TODO if obstruction in current room blocking direction classList = "inaccesible";
+            
+            if (currentRoom.linkedRooms[direction].explored) {
+                document.getElementById(direction).classList = "explored";
+                document.getElementById(direction).innerText = currentRoom.linkedRooms[direction].name;
+            }
+            else {
+                document.getElementById(direction).innerText = "Unexplored Room"
+                document.getElementById(direction).classList = "unexplored";
+            }
+        }
+        else {
+            document.getElementById(direction).classList = "";  //no path so no map
+            document.getElementById(direction).innerText = "";
+        }
+
+    });
+
+    document.getElementById('Here').innerText = currentRoom.name;
+    document.getElementById('Here').classList = "explored";
+
 }
 
 function attemptTravel(inputs) {
@@ -256,7 +293,7 @@ function attemptTravel(inputs) {
                 currentRoom = currentRoom.linkedRooms[desiredExit];
                 document.getElementById('story').innerHTML += "<br> You travel " + desiredExit;
                 document.getElementById('story').innerHTML += "<br> You are in: " + currentRoom.name; //+ " " + currentRoom.description;
-                
+                currentRoom.explored = true;
                 drawMap(currentRoom);
             }
             else {
@@ -277,6 +314,14 @@ function attemptTravel(inputs) {
 
 
 window.onload = () => {
+
+    let playerHealth = 10;
+    let playerInventory = [];
+    currentRoom.explored = true;
+    drawMap();
+
+    // document.getElementById('map-container').hidden = false;
+
     // document.getElementById('game').innerHTML = currentRoom.describe()
     document.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
