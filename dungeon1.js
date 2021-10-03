@@ -51,6 +51,20 @@ burntPlace.linkRoom("North", freedom)
 // {Name: "Club", Attack: 2, Type: "Bash", Special: ""},
 // {Name: "Pickaxe", Attack: 2, Type: "Poke and Bash"}
 
+const armouryDoor = new Door("Armoury Door", "South");
+entrance.addContent(armouryDoor);
+const entranceCharacter = new Character(50)
+entranceCharacter.name = "Strange Person"
+entranceCharacter.conversation = "You'll need to <b>take</b> an appropriate key to <b>use</b> and open that door to the <b>South</b>"
+entrance.addContent(entranceCharacter);
+const armouryKey = new Key("Armoury Key","Armoury Door");
+entrance.addContent(armouryKey);
+const spear = new Weapon("Spear", "Poke", 3);
+armoury.addContent(spear);
+
+
 //Prep character
-currentRoom = entrance;
-entrance.explored;
+currentRoom = entrance;         //IMPORTANT
+currentRoom.explored = true;
+let playerHealth = 10;          //IMPORTANT
+let playerInventory = [];       //IMPORTANT
